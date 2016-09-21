@@ -1,12 +1,14 @@
 syntax on
-filetype on
-
+filetype plugin indent on
+set nocompatible
+set exrc
 set cindent
 set autoindent
 set smartindent
-set sts=2 sw=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
-set nu
+set number
 set scrolloff=15
 set backspace=indent,eol,start
 
@@ -34,7 +36,6 @@ Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
-Plug 'racer-rust/vim-racer'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " Utils
@@ -44,6 +45,7 @@ Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'easymotion/vim-easymotion'
+Plug 'Townk/vim-autoclose'
 call plug#end()
 let g:UltiSnipsEditSplit="vertical"
 
@@ -142,13 +144,13 @@ let g:tagbar_type_rust = {
 \}
 
 " make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-"
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+" let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_key_list_select_completion=['<Down>']
+let g:ycm_key_list_previous_completion=['<Up>']
 
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
