@@ -1,6 +1,7 @@
 " --- general setting ---
 syntax on
 filetype plugin indent on
+set hidden
 set exrc
 set cindent
 set autoindent
@@ -193,3 +194,10 @@ let g:fzf_layout = { 'right': '~40%' }
 let g:ycm_python_binary_path = 'python'
 
 let g:syntastic_cpp_compiler_options = '--std=c++1y'
+
+nmap <leader>T :enew<cr>
+nmap <C-L> :bnext<CR>
+nmap <C-H> :bprevious<CR>
+nmap <leader>bw :bw<CR>
+nmap <leader>bq :bd<CR>
+nmap <leader>bl :ls<CR>
