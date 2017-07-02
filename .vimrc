@@ -1,6 +1,6 @@
+" --- general setting ---
 syntax on
 filetype plugin indent on
-set nocompatible
 set exrc
 set cindent
 set autoindent
@@ -23,56 +23,89 @@ au FileType go setl sw=4 ts=4 sts=0 noexpandtab
 
 " Plugins Start
 call plug#begin('~/.vim/plugged')
+
 " Vim UI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'junegunn/seoul256.vim'
-" Language Support
-Plug 'rust-lang/rust.vim'
-Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go', 'rust'] }
+" Plug 'junegunn/seoul256.vim'
+Plug 'morhetz/gruvbox'
+
+" *---Language Support---*
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'nsf/gocode', { 'for': 'go' } 
-Plug 'majutsushi/tagbar'
-Plug 'scrooloose/syntastic'
+Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
+
+" *---Editor Support---*
+" Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go', 'rust', 'python'] }
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/syntastic'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-" Utils
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+" *---Productivity---*
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
+Plug 'easymotion/vim-easymotion'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'kien/ctrlp.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'easymotion/vim-easymotion'
 Plug 'Townk/vim-autoclose'
+
 call plug#end()
-let g:UltiSnipsEditSplit="vertical"
 
-
-
-let g:ycm_global_ycm_extra_conf = '.vim/.ycm_extra_conf.py'
-
-set background=light
-let g:seoul256_background = 234
-colo seoul256
-
-let g:nerdtree_tabs_open_on_console_startup=1
-
-
-" Key bindings
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
-map <C-P> :FZF<CR>
-nmap <F8> :TagbarToggle<CR>
-imap jj <esc>
-
-" let NERDTreeMapOpenInTab='<ENTER>'
+" Theme
+set background=dark
+" let g:seoul256_background = 234
+" colo seoul256
+colo gruvbox
 
 " air-line
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
-" gotags
+" Nerdtree
+" let g:nerdtree_tabs_open_on_console_startup=1
+" let NERDTreeMapOpenInTab='<ENTER>'
+
+" Key bindings
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+nmap <F8> :TagbarToggle<CR>
+map <C-P> :FZF<CR>
+imap jj <esc>
+
+" nnoremap <C-t>     :tabnew<CR>
+" inoremap <C-t>     <Esc>:tabnew<CR>
+" nnoremap tt  :tabedit<Space>
+" nnoremap td  :tabclose<CR>
+
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" === vim-go ===
+" let g:go_fmt_fail_silently = 0
+let g:go_fmt_command = "goimports"
+" let g:go_autodetect_gopath = 1
+" let g:go_auto_sameids = 0
+" let g:go_auto_type_info = 0
+" let g:go_list_type = "quickfix"
+
+let g:go_highlight_space_tab_error = 0
+let g:go_highlight_array_whitespace_error = 0
+let g:go_highlight_trailing_whitespace_error = 0
+let g:go_highlight_extra_types = 0
+let g:go_highlight_build_constraints = 1
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -101,33 +134,21 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
 \ }
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>s <Plug>(go-implements)
 
-" === vim-go ===
-" let g:go_fmt_fail_silently = 0
-let g:go_fmt_command = "goimports"
-" let g:go_autodetect_gopath = 1
-" let g:go_auto_sameids = 0
-" let g:go_auto_type_info = 0
-" let g:go_list_type = "quickfix"
-
-let g:go_highlight_space_tab_error = 0
-let g:go_highlight_array_whitespace_error = 0
-let g:go_highlight_trailing_whitespace_error = 0
-let g:go_highlight_extra_types = 0
-let g:go_highlight_build_constraints = 1
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 
 " === rust ===
-let g:ycm_rust_src_path = '/usr/local/Cellar/rust/src'
-" let g:ycm_rust_src_path = '/Users/phynalle/Downloads/rustc-1.11.0/src'
-let g:rustfmt_autosave = 1
+let g:ycm_rust_src_path = '/Users/phynalle/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
+" let g:rustfmt_autosave = 1
 
 let g:tagbar_type_rust = {
     \ 'ctagstype' : 'rust',
@@ -142,11 +163,15 @@ let g:tagbar_type_rust = {
         \'i:impls,trait implementations',
     \]
 \}
+let g:godef_split=3
+let g:godef_same_file_in_same_window=1
 
-" make YCM compatible with UltiSnips (using supertab)
+
+" let g:ycm_global_ycm_extra_conf="~/.vim/.ycm_extra_conf.py"
+" make YCM compatible with UltiSnips
 " let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_key_list_select_completion=['<Down>']
-let g:ycm_key_list_previous_completion=['<Up>']
+" let g:ycm_key_list_select_completion=['<Down>']
+" let g:ycm_key_list_previous_completion=['<Up>']
 
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -154,3 +179,17 @@ let g:UltiSnipsListSnippets="<c-tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
+
+" This is the default extra key bindings
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Default fzf layout
+" - down / up / left / right
+let g:fzf_layout = { 'right': '~40%' }
+
+let g:ycm_python_binary_path = 'python'
+
+let g:syntastic_cpp_compiler_options = '--std=c++1y'
