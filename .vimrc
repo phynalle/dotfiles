@@ -41,11 +41,14 @@ Plug 'plasticboy/vim-markdown'
 " *---Editor Support---*
 " Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go', 'rust', 'python'] }
 Plug 'majutsushi/tagbar'
+Plug 'vim-scripts/cscope.vim'
+
 Plug 'scrooloose/syntastic'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " *---Productivity---*
+Plug 'Shougo/neocomplete.vim'
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'easymotion/vim-easymotion'
@@ -167,19 +170,11 @@ let g:tagbar_type_rust = {
 let g:godef_split=3
 let g:godef_same_file_in_same_window=1
 
-
-" let g:ycm_global_ycm_extra_conf="~/.vim/.ycm_extra_conf.py"
-" make YCM compatible with UltiSnips
-" let g:ycm_autoclose_preview_window_after_completion=1
-" let g:ycm_key_list_select_completion=['<Down>']
-" let g:ycm_key_list_previous_completion=['<Up>']
-
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
 
 " This is the default extra key bindings
 let g:fzf_action = {
@@ -189,9 +184,7 @@ let g:fzf_action = {
 
 " Default fzf layout
 " - down / up / left / right
-let g:fzf_layout = { 'right': '~40%' }
-
-let g:ycm_python_binary_path = 'python'
+" let g:fzf_layout = { 'right': '~40%' }
 
 let g:syntastic_cpp_compiler_options = '--std=c++1y'
 
@@ -201,3 +194,9 @@ nmap <C-H> :bprevious<CR>
 nmap <leader>bw :bw<CR>
 nmap <leader>bq :bd<CR>
 nmap <leader>bl :ls<CR>
+
+" *--- Setting for neocomplete ---*
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
