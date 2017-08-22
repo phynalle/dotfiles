@@ -9,9 +9,13 @@ set smartindent
 set softtabstop=2
 set shiftwidth=2
 set expandtab
+set relativenumber
 set number
 set scrolloff=15
 set backspace=indent,eol,start
+
+set hlsearch
+set smartcase
 
 au FileType python,rust setl sw=4 sts=4
 au FileType go setl sw=4 ts=4 sts=0 noexpandtab
@@ -38,14 +42,14 @@ Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
 
-" *---Editor Support---*
+" *---IDE Support---*
 " Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go', 'rust', 'python'] }
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/cscope.vim'
-
 Plug 'scrooloose/syntastic'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'Yggdroot/indentLine'
 
 " *---Productivity---*
 Plug 'Shougo/neocomplete.vim'
@@ -192,8 +196,13 @@ nmap <leader>T :enew<cr>
 nmap <C-L> :bnext<CR>
 nmap <C-H> :bprevious<CR>
 nmap <leader>bw :bw<CR>
-nmap <leader>bq :bd<CR>
+nmap <leader>bq :bd!<CR>
 nmap <leader>bl :ls<CR>
+nmap <C-1> :b1<CR>
+nmap <C-2> :b2<CR>
+nmap <C-3> :b3<CR>
+nmap <C-4> :b4<CR>
+nmap <C-5> :b5<CR>
 
 " *--- Setting for neocomplete ---*
 let g:acp_enableAtStartup = 0
