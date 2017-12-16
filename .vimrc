@@ -48,7 +48,6 @@ Plug 'Shougo/neocomplete.vim'
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'easymotion/vim-easymotion'
-Plug 'nathanaelkane/vim-indent-guides'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
@@ -175,10 +174,6 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" Default fzf layout
-" - down / up / left / right
-" let g:fzf_layout = { 'right': '~40%' }
-
 let g:syntastic_cpp_compiler_options = '--std=c++1y'
 
 nmap <leader>T :enew<cr>
@@ -198,3 +193,7 @@ let g:acp_enableAtStartup = 0
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+let g:indentLine_enabled = 0
+let g:indentLine_leadingSpaceEnabled = 1
+let g:indentLine_leadingSpaceChar = '·'
