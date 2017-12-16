@@ -18,13 +18,7 @@ set hlsearch
 set smartcase
 
 au FileType python,rust setl sw=4 sts=4
-au FileType go setl sw=4 ts=4 sts=0 noexpandtab
-
-" if !isdirectory(@%)
-"  au VimEnter * nested :TagbarToggle
-"  au VimEnter * nested :NERDTreeTabsToggle
-"  au VimEnter * wincmd p 
-" endif
+au FileType go setl sw=4 ts=4 sts=0 noexpandtab 
 
 " Plugins Start
 call plug#begin('~/.vim/plugged')
@@ -32,8 +26,7 @@ call plug#begin('~/.vim/plugged')
 " Vim UI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'junegunn/seoul256.vim'
-Plug 'morhetz/gruvbox'
+Plug 'nanotech/jellybeans.vim'
 
 " *---Language Support---*
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
@@ -43,7 +36,6 @@ Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
 
 " *---IDE Support---*
-" Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go', 'rust', 'python'] }
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/cscope.vim'
 Plug 'scrooloose/syntastic'
@@ -57,20 +49,17 @@ Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'easymotion/vim-easymotion'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'kien/ctrlp.vim'
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'Townk/vim-autoclose'
+Plug 'jiangmiao/auto-pairs'
 
 call plug#end()
 
 " Theme
 set background=dark
-" let g:seoul256_background = 234
-" colo seoul256
-colo gruvbox
+colo jellybeans
 
 " air-line
 let g:airline#extensions#tabline#enabled = 1
