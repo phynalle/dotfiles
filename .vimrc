@@ -13,12 +13,11 @@ set relativenumber
 set number
 set scrolloff=15
 set backspace=indent,eol,start
-
 set hlsearch
 set smartcase
 
 au FileType python,rust setl sw=4 sts=4
-au FileType go setl sw=4 ts=4 sts=0 noexpandtab 
+au FileType go setl sw=4 ts=4 sts=0 noexpandtab
 
 " Plugins Start
 call plug#begin('~/.vim/plugged')
@@ -30,8 +29,11 @@ Plug 'nanotech/jellybeans.vim'
 
 " *---Language Support---*
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
 
@@ -43,8 +45,14 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Yggdroot/indentLine'
 
-" *---Productivity---*
-Plug 'Shougo/neocomplete.vim'
+"   *---Productivity---*
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'easymotion/vim-easymotion'
@@ -54,10 +62,14 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 
+if !has('nvim')
+  Plug 'vim-utils/vim-alt-mappings'
+endif
+
 call plug#end()
 
 " Theme
-set background=dark
+" set background=dark
 colo jellybeans
 
 " air-line
@@ -143,9 +155,6 @@ au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 
 " === rust ===
-let g:ycm_rust_src_path = '/Users/phynalle/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
-" let g:rustfmt_autosave = 1
-
 let g:tagbar_type_rust = {
     \ 'ctagstype' : 'rust',
     \ 'kinds' : [
@@ -188,12 +197,15 @@ nmap <C-3> :b3<CR>
 nmap <C-4> :b4<CR>
 nmap <C-5> :b5<CR>
 
-" *--- Setting for neocomplete ---*
-let g:acp_enableAtStartup = 0
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
+" *--- Setting for deoplete ---*
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#auto_complete_start_length = 3
+let g:deoplete#max_menu_width = 80
 
+" *--- Setting for indentLine ---*
 let g:indentLine_enabled = 0
 let g:indentLine_leadingSpaceEnabled = 1
 let g:indentLine_leadingSpaceChar = '·'
+
+
