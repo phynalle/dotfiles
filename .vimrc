@@ -30,19 +30,18 @@ call plug#begin('~/.vim/plugged')
 " Vim UI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'ciaranm/inkpot'
 Plug 'jacoborus/tender.vim'
-" Plug 'joshdick/onedark.vim'
+Plug 'joshdick/onedark.vim'
 
 " *---Language Support---*
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-" Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+Plug 'racer-rust/vim-racer', { 'for': 'rust' }
 " Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-" Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
 
@@ -55,13 +54,14 @@ Plug 'honza/vim-snippets'
 Plug 'Yggdroot/indentLine'
 
 "   *---Productivity---*
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'easymotion/vim-easymotion'
@@ -71,9 +71,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 
-Plug 'prabirshrestha/vim-lsp'
-Plug 'autozimu/LanguageClient-neovim'
-Plug 'roxma/nvim-completion-manager'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'autozimu/LanguageClient-neovim'
+" Plug 'roxma/nvim-completion-manager'
 
 if !has('nvim')
   Plug 'vim-utils/vim-alt-mappings'
@@ -235,13 +235,15 @@ let g:deoplete#max_menu_width = 80
 "
 
 
-let g:LanguageClient_autoStart = 1
-
-let g:LanguageClient_serverCommands = {
-    \ 'python': ['pyls'],
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'go': ['go-langserver'] }
-
-
-
+" let g:LanguageClient_autoStart = 1
+" 
+" let g:LanguageClient_serverCommands = {
+"     \ 'python': ['pyls'],
+"     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+"     \ 'javascript': ['javascript-typescript-stdio'],
+"     \ 'go': ['go-langserver'] }
+" 
+" noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
+" noremap <silent> Z :call LanguageClient_textDocument_definition()<CR>
+" noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
+" noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
