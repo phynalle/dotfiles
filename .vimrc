@@ -15,9 +15,14 @@ set scrolloff=15
 set backspace=indent,eol,start
 set hlsearch
 set smartcase
+set guicursor=
 
 au FileType python,rust setl sw=4 sts=4
 au FileType go setl sw=4 ts=4 sts=0 noexpandtab
+
+if (has("termguicolors"))
+   set termguicolors
+endif
 
 " Plugins Start
 call plug#begin('~/.vim/plugged')
@@ -25,15 +30,19 @@ call plug#begin('~/.vim/plugged')
 " Vim UI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim'
+Plug 'ciaranm/inkpot'
+Plug 'jacoborus/tender.vim'
+" Plug 'joshdick/onedark.vim'
 
 " *---Language Support---*
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'racer-rust/vim-racer', { 'for': 'rust' }
-Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
+" Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+" Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'zchee/deoplete-go', { 'do': 'make'}
+" Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
 
@@ -46,13 +55,13 @@ Plug 'honza/vim-snippets'
 Plug 'Yggdroot/indentLine'
 
 "   *---Productivity---*
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
 Plug 'easymotion/vim-easymotion'
@@ -62,6 +71,10 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 
+Plug 'prabirshrestha/vim-lsp'
+Plug 'autozimu/LanguageClient-neovim'
+Plug 'roxma/nvim-completion-manager'
+
 if !has('nvim')
   Plug 'vim-utils/vim-alt-mappings'
 endif
@@ -70,11 +83,15 @@ call plug#end()
 
 " Theme
 " set background=dark
-colo jellybeans
+colo  onedark
 
 " air-line
 let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_powerline_fonts = 1
+let g:airline_theme='onedark'
+
 
 " Nerdtree
 " let g:nerdtree_tabs_open_on_console_startup=1
@@ -135,7 +152,7 @@ let g:tagbar_type_go = {
         \ 'n' : 'ntype'
     \ },
     \ 'scope2kind' : {
-        \ 'ctype' : 't',
+    \ 'ctype' : 't',
         \ 'ntype' : 'n'
     \ },
     \ 'ctagsbin'  : 'gotags',
@@ -154,7 +171,8 @@ au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 
-" === rust ===
+" Setting for Rust 
+let g:autofmt_autosave = 1
 let g:tagbar_type_rust = {
     \ 'ctagstype' : 'rust',
     \ 'kinds' : [
@@ -204,8 +222,26 @@ let g:deoplete#auto_complete_start_length = 3
 let g:deoplete#max_menu_width = 80
 
 " *--- Setting for indentLine ---*
-let g:indentLine_enabled = 0
-let g:indentLine_leadingSpaceEnabled = 1
-let g:indentLine_leadingSpaceChar = '·'
+" let g:indentLine_enabled = 0
+" let g:indentLine_leadingSpaceEnabled = 1
+" let g:indentLine_leadingSpaceChar = '·'
+"
+" *--- Setting for ---*
+" let g:lightline = {
+"   \ 'colorscheme': 'onedark',
+"   \ }
+
+" *--- Setting for NCM ---*
+"
+
+
+let g:LanguageClient_autoStart = 1
+
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'go': ['go-langserver'] }
+
 
 
