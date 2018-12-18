@@ -6,22 +6,28 @@ set exrc
 set cindent
 set autoindent
 set smartindent
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set expandtab
 set relativenumber
 set number
-set scrolloff=15
 set backspace=indent,eol,start
 set hlsearch
 set smartcase
-set completeopt-=preview
+" set completeopt-=preview
+set completeopt=noinsert,menuone,noselect
 set guicursor=
 set showtabline=2
 set noshowmode
+set shell=/bin/zsh
 
-au FileType python,rust setl sw=4 sts=4
-au FileType go setl sw=4 ts=4 sts=0 noexpandtab
+au FileType c,cpp setl sw=2 sts=2
+" au FileType python,rust setl sw=4 sts=4
+au FileType go setl sts=0 noexpandtab
+autocmd BufEnter * call ncm2#enable_for_buffer()
+autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
+autocmd BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
 autocmd BufEnter * EnableStripWhitespaceOnSave
 
 if (has("termguicolors"))
@@ -33,12 +39,25 @@ call plug#begin('~/.vim/plugged')
 "  *---Productivity---*
 " Completion Supports
 if has('nvim')
-"   Plug 'autozimu/LanguageClient-neovim', {
-"       \ 'branch': 'next',
-"       \ 'do': 'bash install.sh',
-"       \ }
-  Plug 'roxma/nvim-completion-manager'
-  Plug 'roxma/nvim-cm-racer'
+"  Plug 'roxma/nvim-completion-manager'
+"  Plug 'roxma/nvim-cm-racer'
+   Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+  Plug 'ncm2/ncm2'
+  Plug 'roxma/nvim-yarp'
+
+  Plug 'ncm2/ncm2-bufword'
+  Plug 'ncm2/ncm2-tmux'
+  Plug 'ncm2/ncm2-path'
+  Plug 'ncm2/ncm2-ultisnips'
+  Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
+
+  Plug 'ncm2/ncm2-pyclang'
+  Plug 'ncm2/ncm2-racer'
+  Plug 'ncm2/ncm2-jedi'
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -52,11 +71,15 @@ endif
 " Vim UI
 " Plug 'vim-airline/vim-airline'
 " Plug 'vim-airline/vim-airline-themes'
+Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'nanotech/jellybeans.vim'
 Plug 'joshdick/onedark.vim'
+Plug 'chriskempson/base16-vim'
 Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/vim-tomorrow-theme'
+Plug 'rakr/vim-one'
 
 " *---Language Support---*
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
@@ -64,11 +87,13 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'cespare/vim-toml'
 Plug 'plasticboy/vim-markdown'
+Plug 'dag/vim-fish', { 'for': 'fish' }
+Plug 'elmcast/elm-vim', { 'for': 'elm' }
 
 " *---IDE Support---*
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/cscope.vim'
-Plug 'scrooloose/syntastic'
+Plug 'vim-syntastic/syntastic'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Yggdroot/indentLine'
@@ -82,6 +107,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'vim-scripts/Conque-GDB'
+Plug 'dbgx/lldb.nvim'
+Plug 'tpope/vim-commentary'
 
 if !has('nvim')
   Plug 'vim-utils/vim-alt-mappings'
@@ -95,8 +123,8 @@ endif
 
 
 " Theme
-" set background=dark
-colo  onedark
+set background=dark
+colo base16-gruvbox-dark-pale
 
 " air-line
 " let g:airline#extensions#tabline#enabled = 1
@@ -125,6 +153,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+let g:syntastic_rust_checkers = ['cargo']
+
 
 " === vim-go ===
 " let g:go_fmt_fail_silently = 0
@@ -204,16 +235,17 @@ let g:godef_same_file_in_same_window=1
 " let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " key bindings for compatiblilty with NCM
-let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
+" let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
+inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
 let g:UltiSnipsJumpForwardTrigger	= "<c-j>"
 let g:UltiSnipsJumpBackwardTrigger	= "<c-k>"
 let g:UltiSnipsRemoveSelectModeMappings = 0
-inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
+" inoremap <silent> <c-u> <c-r>=cm2#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
 
 " Setting for NCM
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>\<Plug>AutoPairsReturn")
-imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
+imap <expr> <CR> (pumvisible() ?  "\<c-y>\<Plug>(ncm2_ultisnips_expand_completed)" : "\<CR>\<Plug>AutoPairsReturn")
+imap <expr> <Plug>(ncm2_ultisnips_expand_completed) (ncm2_ultisnips#completed_is_snippet() ? "\<C-U>":"\<CR>")
 inoremap <c-c> <ESC>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -273,7 +305,7 @@ nmap <C-5> :b5<CR>
 " noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
 
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -295,3 +327,7 @@ let g:lightline = {
       \ }
 
 let g:lightline#bufferline#unnamed      = '[No Name]'
+
+let g:ncm2_pyclang#library_path = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib'
+
+let g:strip_whitespace_on_save = 1
