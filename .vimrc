@@ -150,7 +150,7 @@ au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 
 " Setting for Rust
-let g:rustfmt_autosave = 1
+" let g:rustfmt_autosave = 1
 
 let g:autofmt_autosave = 1
 let g:godef_split=3
@@ -276,8 +276,5 @@ nmap <Leader>t <Plug>(easymotion-tn)
 let g:vista_default_executive = "ctags"
 let g:vista_blink = [1, 250]
 
-au FileType rust nmap gd <Plug>(rust-def)
-au FileType rust nmap gs <Plug>(rust-def-split)
-au FileType rust nmap gx <Plug>(rust-def-vertical)
+nmap <silent> gd <Plug>(coc-definition)
 au FileType rust nmap <leader>gd <Plug>(rust-doc)
-
