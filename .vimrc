@@ -4,7 +4,6 @@ filetype plugin indent on
 set hidden
 set exrc
 set cindent
-set autoindent
 set smartindent
 set tabstop=4
 set softtabstop=4
@@ -12,7 +11,6 @@ set shiftwidth=4
 set expandtab
 set relativenumber
 set number
-set backspace=indent,eol,start
 set hlsearch
 set smartcase
 " set completeopt-=preview
@@ -25,7 +23,6 @@ set shell=/bin/zsh
 au FileType c,cpp setl sw=2 sts=2
 " au FileType python,rust setl sw=4 sts=4
 au FileType go setl sts=0 noexpandtab
-autocmd BufEnter * call ncm2#enable_for_buffer()
 autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
 autocmd BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
 autocmd BufEnter * EnableStripWhitespaceOnSave
@@ -38,64 +35,23 @@ endif
 call plug#begin('~/.vim/plugged')
 "  *---Productivity---*
 " Completion Supports
-if has('nvim')
-"  Plug 'roxma/nvim-completion-manager'
-"  Plug 'roxma/nvim-cm-racer'
-   Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-
-  Plug 'ncm2/ncm2'
-  Plug 'roxma/nvim-yarp'
-
-  Plug 'ncm2/ncm2-bufword'
-  Plug 'ncm2/ncm2-tmux'
-  Plug 'ncm2/ncm2-path'
-  Plug 'ncm2/ncm2-ultisnips'
-  Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
-
-  Plug 'ncm2/ncm2-pyclang'
-  Plug 'ncm2/ncm2-racer'
-  Plug 'ncm2/ncm2-jedi'
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-
-  Plug 'racer-rust/vim-racer', { 'for': 'rust' }
-  Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
-  Plug 'zchee/deoplete-go', { 'do': 'make'}
-endif
 
 " Vim UI
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
-Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'mgee/lightline-bufferline'
-Plug 'nanotech/jellybeans.vim'
-Plug 'joshdick/onedark.vim'
 Plug 'chriskempson/base16-vim'
-Plug 'altercation/vim-colors-solarized'
-Plug 'chriskempson/vim-tomorrow-theme'
-Plug 'rakr/vim-one'
+Plug 'junegunn/seoul256.vim'
 
 " *---Language Support---*
-Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 Plug 'nsf/gocode', { 'for': 'go', 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'cespare/vim-toml'
-Plug 'plasticboy/vim-markdown'
-Plug 'dag/vim-fish', { 'for': 'fish' }
-Plug 'elmcast/elm-vim', { 'for': 'elm' }
+Plug 'isRuslan/vim-es6'
+Plug 'sheerun/vim-polyglot'
+Plug 'racer-rust/vim-racer'
 
 " *---IDE Support---*
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/cscope.vim'
-Plug 'vim-syntastic/syntastic'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'Yggdroot/indentLine'
 Plug 'scrooloose/nerdtree' ", { 'on':  'NERDTreeToggle' }
 Plug 'jistr/vim-nerdtree-tabs' ", { 'on': 'NERDTreeTabsToggle' }
@@ -104,58 +60,41 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-sensible'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'vim-scripts/Conque-GDB'
-Plug 'dbgx/lldb.nvim'
-Plug 'tpope/vim-commentary'
+Plug 'liuchengxu/vista.vim'
+Plug 'cohama/agit.vim'
 
 if !has('nvim')
   Plug 'vim-utils/vim-alt-mappings'
 endif
-
 call plug#end()
 
-if !has('gui_running')
-  set t_Co=256
-endif
-
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case --glob "!{.git/*,*.pyc}" '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 " Theme
 set background=dark
-colo base16-gruvbox-dark-pale
-
-" air-line
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#left_sep = ' '
-" let g:airline#extensions#tabline#left_alt_sep = '|'
-" let g:airline_powerline_fonts = 1
-" let g:airline_theme='onedark'
-
+" colo base16-gruvbox-dark-pale
+let g:seoul256_background = 235
+colo seoul256
+hi CursorLineNr guibg=#3F3F3F
 " Nerdtree
 " let g:nerdtree_tabs_open_on_console_startup=1
 " let NERDTreeMapOpenInTab='<ENTER>'
 
 " Key bindings
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
-nmap <F8> :TagbarToggle<CR>
+nmap <F8> :Vista<CR>
 map <C-P> :FZF<CR>
 imap jj <esc>
-
-" syntastic
-"
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_rust_checkers = ['cargo']
-
 
 " === vim-go ===
 " let g:go_fmt_fail_silently = 0
@@ -211,101 +150,26 @@ au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 
 " Setting for Rust
+let g:rustfmt_autosave = 1
+
 let g:autofmt_autosave = 1
-let g:tagbar_type_rust = {
-    \ 'ctagstype' : 'rust',
-    \ 'kinds' : [
-        \'T:types,type definitions',
-        \'f:functions,function definitions',
-        \'g:enum,enumeration names',
-        \'s:structure names',
-        \'m:modules,module names',
-        \'c:consts,static constants',
-        \'t:traits,traits',
-        \'i:impls,trait implementations',
-    \]
-\}
 let g:godef_split=3
 let g:godef_same_file_in_same_window=1
 
-" better key bindings for UltiSnipsExpandTrigger
-" let g:UltiSnipsExpandTrigger="<tab>"
-" let g:UltiSnipsListSnippets="<c-tab>"
-" let g:UltiSnipsJumpForwardTrigger="<tab>"
-" let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-" key bindings for compatiblilty with NCM
-" let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
-inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
-let g:UltiSnipsJumpForwardTrigger	= "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger	= "<c-k>"
-let g:UltiSnipsRemoveSelectModeMappings = 0
-" inoremap <silent> <c-u> <c-r>=cm2#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
-
-" Setting for NCM
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-imap <expr> <CR> (pumvisible() ?  "\<c-y>\<Plug>(ncm2_ultisnips_expand_completed)" : "\<CR>\<Plug>AutoPairsReturn")
-imap <expr> <Plug>(ncm2_ultisnips_expand_completed) (ncm2_ultisnips#completed_is_snippet() ? "\<C-U>":"\<CR>")
-inoremap <c-c> <ESC>
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" This options should be disabled because it conflicts with completion
-let g:AutoPairsMapCR = 0
-
-
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
-let g:syntastic_cpp_compiler_options = '--std=c++1y'
-
 " *--- Keybindings to control buffer"
-nmap <leader>T :enew<cr>
+nmap <leader>T :enew<CR>
 nmap <C-L> :bnext<CR>
 nmap <C-H> :bprevious<CR>
-nmap <leader>bw :bw<CR>
-nmap <leader>bq :bd!<CR>
 nmap <leader>bl :ls<CR>
 nmap <C-1> :b1<CR>
 nmap <C-2> :b2<CR>
 nmap <C-3> :b3<CR>
 nmap <C-4> :b4<CR>
 nmap <C-5> :b5<CR>
-
-" *--- Setting for deoplete ---*
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_smart_case = 1
-" let g:deoplete#auto_complete_start_length = 3
-" let g:deoplete#max_menu_width = 80
-"
-" *--- Setting for indentLine ---*
-" let g:indentLine_enabled = 0
-" let g:indentLine_leadingSpaceEnabled = 1
-" let g:indentLine_leadingSpaceChar = '·'
-"
-" *--- Setting for ---*
-" let g:lightline = {
-"   \ 'colorscheme': 'onedark',
-"   \ }
-
-" *--- Setting for NCM ---*
-
-" let g:LanguageClient_autoStart = 1
-" let g:LanguageClient_serverCommands = {
-"      \ 'python': ['pyls'],
-"      \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-"      \ 'javascript': ['javascript-typescript-stdio'],
-"      \ 'go': ['go-langserver'] }
-"
-" noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
-" noremap <silent> Z :call LanguageClient_textDocument_definition()<CR>
-" noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
-" noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
+nmap <C-S-F> :Rg<space>
 
 let g:lightline = {
-      \ 'colorscheme': 'onedark',
+      \ 'colorscheme': 'seoul256',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -328,6 +192,92 @@ let g:lightline = {
 
 let g:lightline#bufferline#unnamed      = '[No Name]'
 
-let g:ncm2_pyclang#library_path = '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib'
-
 let g:strip_whitespace_on_save = 1
+
+" Delete buffer while keeping window layout (don't close buffer's windows).
+" Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
+if v:version < 700 || exists('loaded_bclose') || &cp
+  finish
+endif
+let loaded_bclose = 1
+if !exists('bclose_multiple')
+  let bclose_multiple = 1
+endif
+
+" Display an error message.
+function! s:Warn(msg)
+  echohl ErrorMsg
+  echomsg a:msg
+  echohl NONE
+endfunction
+
+" Command ':Bclose' executes ':bd' to delete buffer in current window.
+" The window will show the alternate buffer (Ctrl-^) if it exists,
+" or the previous buffer (:bp), or a blank buffer if no previous.
+" Command ':Bclose!' is the same, but executes ':bd!' (discard changes).
+" An optional argument can specify which buffer to close (name or number).
+function! s:Bclose(bang, buffer)
+  if empty(a:buffer)
+    let btarget = bufnr('%')
+  elseif a:buffer =~ '^\d\+$'
+    let btarget = bufnr(str2nr(a:buffer))
+  else
+    let btarget = bufnr(a:buffer)
+  endif
+  if btarget < 0
+    call s:Warn('No matching buffer for '.a:buffer)
+    return
+  endif
+  if empty(a:bang) && getbufvar(btarget, '&modified')
+    call s:Warn('No write since last change for buffer '.btarget.' (use :Bclose!)')
+    return
+  endif
+  " Numbers of windows that view target buffer which we will delete.
+  let wnums = filter(range(1, winnr('$')), 'winbufnr(v:val) == btarget')
+  if !g:bclose_multiple && len(wnums) > 1
+    call s:Warn('Buffer is in multiple windows (use ":let bclose_multiple=1")')
+    return
+  endif
+  let wcurrent = winnr()
+  for w in wnums
+    execute w.'wincmd w'
+    let prevbuf = bufnr('#')
+    if prevbuf > 0 && buflisted(prevbuf) && prevbuf != btarget
+      buffer #
+    else
+      bprevious
+    endif
+    if btarget == bufnr('%')
+      " Numbers of listed buffers which are not the target to be deleted.
+      let blisted = filter(range(1, bufnr('$')), 'buflisted(v:val) && v:val != btarget')
+      " Listed, not target, and not displayed.
+      let bhidden = filter(copy(blisted), 'bufwinnr(v:val) < 0')
+      " Take the first buffer, if any (could be more intelligent).
+      let bjump = (bhidden + blisted + [-1])[0]
+      if bjump > 0
+        execute 'buffer '.bjump
+      else
+        execute 'enew'.a:bang
+      endif
+    endif
+  endfor
+  execute 'bdelete'.a:bang.' '.btarget
+  execute wcurrent.'wincmd w'
+endfunction
+command! -bang -complete=buffer -nargs=? Bclose call <SID>Bclose(<q-bang>, <q-args>)
+nnoremap <silent> <Leader>bd :Bclose<CR>
+
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" s{char}{char} to move to {char}{char}
+nmap <Leader>s <Plug>(easymotion-sn)
+nmap <Leader>t <Plug>(easymotion-tn)
+
+let g:vista_default_executive = "ctags"
+let g:vista_blink = [1, 250]
+
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
+
