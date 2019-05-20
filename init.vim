@@ -10,15 +10,27 @@ set hidden
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-surround'
 Plug 'morhetz/gruvbox'
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sensible'
+Plug 'liuchengxu/vista.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'cohama/agit.vim'
+Plug 'junegunn/seoul256.vim'
+" Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
+" set background=dark
+" colo gruvbox
 set background=dark
-colo gruvbox
+let g:seoul256_background = 235
+colo seoul256
+hi CursorLineNr ctermbg=236 guibg=#3F3F3F
 
 autocmd BufWritePre * :call TrimWhitespace()
 
@@ -56,6 +68,7 @@ function! TrimWhitespace()
 endfunction
 
 nmap <c-p> :call FZFCustom()<CR>
+nmap <c-f> :Rg<space>
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
@@ -67,6 +80,9 @@ nmap <c-1> :b 1<CR>
 nmap <c-2> :b 2<CR>
 nmap <c-3> :b 3<CR>
 nmap <c-4> :b 4<CR>
+
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+nmap <silent> gd <Plug>(coc-definition)
 
 " Delete buffer while keeping window layout (don't close buffer's windows).
 " Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
@@ -140,3 +156,98 @@ function! s:Bclose(bang, buffer)
 endfunction
 command! -bang -complete=buffer -nargs=? Bclose call <SID>Bclose(<q-bang>, <q-args>)
 nnoremap <silent> <Leader>bd :Bclose<CR>
+
+function DecorateHotFunction()
+    let [_, curline, curcol, _, _] = getcurpos()
+    call cursor(1, 1)
+    while v:true
+        let line = search('^\s*def \w\+(', 'cW')
+        if line == 0
+            break
+        endif
+
+        call cursor(line + 1, curcol)
+        if getline(line - 1) =~ '^\s*@hot$'
+            continue
+        endif
+        if line <= curline
+            let curline += 1
+        endif
+
+        let whitespaces = matchstr(getline(line), '^\s*')
+        call append(line - 1, whitespaces.'@hot')
+    endwhile
+    call cursor(curline, curcol)
+endfunction
+
+function ImportHotDecorator()
+    let code = "from k1server.hotreload import hot"
+    let line = search('^from __future__', 'n')
+    if line == 0
+        if getline(1) =~ '# -\*- coding'
+            let line = 1
+        endif
+    endif
+    if getline(line + 1) != code
+        call append(line, code)
+    endif
+endfunction
+
+function DecorateHotClass()
+    call ImportHotDecorator()
+
+    let [_, curline, curcol, _, _] = getcurpos()
+    call cursor(1, 1)
+    while v:true
+        let line = search('^\s*class \w\+', 'W')
+        while line > 0
+            if getline(line - 1) =~ '^\s*@hot$'
+                break
+            elseif getline(line - 1) =~ '^\s*@'
+                let line -= 1
+            else
+                break
+            endif
+        endwhile
+        if line == 0
+            break
+        endif
+        if getline(line - 1) =~ '^\s*@hot$'
+            continue
+        endif
+        if line <= curline
+            let curline += 1
+        endif
+
+        let whitespaces = matchstr(getline(line), '^\s*')
+        call append(line - 1, whitespaces.'@hot')
+    endwhile
+    call cursor(curline, curcol)
+endfunction
+
+function DecorateHot()
+    call DecorateHotClass()
+    call DecorateHotFunction()
+endfunction
+
+function RemoveHotDecorated()
+    let [_, curline, curcol, _, _] = getcurpos()
+    call cursor(1, 1)
+    while v:true
+        let line = search('^\s*@hot', 'cW')
+        if line == 0
+            break
+        endif
+        execute line.',delete'
+        if line < curline
+            let curline -= 1
+        endif
+    endwhile
+    call cursor(curline, curcol)
+    execute search('from k1server.hotreload import hot').',delete'
+endfunction
+
+command! Hot call DecorateHot()
+command! HotFunc call DecorateHotFunction()
+command! HotClass call DecorateHotClass()
+command! Hotx call RemoveHotDecorated()
