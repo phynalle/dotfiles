@@ -19,13 +19,21 @@ set guicursor=
 set showtabline=2
 set noshowmode
 set shell=/bin/zsh
+set autoread
+set signcolumn=yes
+set updatetime=150
+set shortmess+=c
+set nobackup
+set nowritebackup
 
 au FileType c,cpp setl sw=2 sts=2
 " au FileType python,rust setl sw=4 sts=4
 au FileType go setl sts=0 noexpandtab
-autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
-autocmd BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
-autocmd BufEnter * EnableStripWhitespaceOnSave
+au BufRead *.rs :setlocal tags=./rusty-tags.vi;/
+au BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
+au BufEnter * EnableStripWhitespaceOnSave
+au CursorHold * silent call CocActionAsync('highlight')
+au CursorHold,FocusGained,BufEnter * :checktime
 
 if (has("termguicolors"))
    set termguicolors
@@ -41,6 +49,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'chriskempson/base16-vim'
 Plug 'junegunn/seoul256.vim'
+Plug 'liuchengxu/space-vim-dark'
 
 " *---Language Support---*
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
@@ -86,6 +95,9 @@ set background=dark
 let g:seoul256_background = 235
 colo seoul256
 hi CursorLineNr guibg=#3F3F3F
+hi ExtraWhitespace guibg=Red
+" colo space-vim-dark
+" hi Comment cterm=italic
 " Nerdtree
 " let g:nerdtree_tabs_open_on_console_startup=1
 " let NERDTreeMapOpenInTab='<ENTER>'
@@ -182,8 +194,8 @@ let g:lightline = {
       \   'buffers': 'tabsel',
       \ },
       \ 'component_function': {
-      \   'bufferinfo': 'lightline#buffer#bufferinfo',
-      \   'gitbranch': 'fugitive#head'
+      \   'cocstatus': 'coc#status',
+      \   'gitbranch': 'fugitive#head',
       \ },
       \ 'component': {
       \   'separator': '',
@@ -193,7 +205,9 @@ let g:lightline = {
 let g:lightline#bufferline#unnamed      = '[No Name]'
 
 let g:strip_whitespace_on_save = 1
+let g:strip_whitespace_confirm = 0
 
+let g:gitgutter_grep='rg'
 " Delete buffer while keeping window layout (don't close buffer's windows).
 " Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
 if v:version < 700 || exists('loaded_bclose') || &cp
@@ -266,8 +280,18 @@ function! s:Bclose(bang, buffer)
 endfunction
 command! -bang -complete=buffer -nargs=? Bclose call <SID>Bclose(<q-bang>, <q-args>)
 nnoremap <silent> <Leader>bd :Bclose<CR>
+nnoremap <silent> <Leader>bD :Bclose!<CR>
 
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
 
 " s{char}{char} to move to {char}{char}
 nmap <Leader>s <Plug>(easymotion-sn)
@@ -277,4 +301,13 @@ let g:vista_default_executive = "ctags"
 let g:vista_blink = [1, 250]
 
 nmap <silent> gd <Plug>(coc-definition)
-au FileType rust nmap <leader>gd <Plug>(rust-doc)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
