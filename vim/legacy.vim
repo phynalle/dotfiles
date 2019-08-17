@@ -2,12 +2,11 @@
 syntax on
 filetype plugin indent on
 set hidden
-set exrc
 set cindent
 set smartindent
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set ts=4
+set sts=4
+set sw=4
 set expandtab
 set relativenumber
 set number
@@ -27,12 +26,8 @@ set nobackup
 set nowritebackup
 
 au FileType c,cpp setl sw=2 sts=2
-" au FileType python,rust setl sw=4 sts=4
 au FileType go setl sts=0 noexpandtab
-au BufRead *.rs :setlocal tags=./rusty-tags.vi;/
-au BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
 au BufEnter * EnableStripWhitespaceOnSave
-au CursorHold * silent call CocActionAsync('highlight')
 au CursorHold,FocusGained,BufEnter * :checktime
 
 if (has("termguicolors"))
