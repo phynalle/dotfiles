@@ -13,6 +13,10 @@ setup_installer() {
         INSTALLER='pacman -Syy'
     elif exists yum ; then
         INSTALLER='yum install'
+    elif exists dnf ; then
+        INSTALLER='dnf install'
+    elif exists emerge ; then
+        INSTALLER='emerge -av'
     fi
 }
 
@@ -29,4 +33,6 @@ if [ -z "$INSTALLER" ] ; then
     exit -1
 fi
 
-install fish
+install fish git ripgrep exa
+# fd는 패키지마다 이름이 달라서 따로 설치하자..
+echo "Let's install fd-find, manually"
