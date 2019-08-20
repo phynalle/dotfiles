@@ -30,6 +30,8 @@ call plug#begin('~/.vim/plugged')
 " UI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/seoul256.vim'
+Plug 'morhetz/gruvbox'
 
 " Language Support
 " Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
@@ -50,7 +52,6 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'liuchengxu/vista.vim'
 Plug 'cohama/agit.vim'
 Plug 'rbgrouleff/bclose.vim'
-Plug 'junegunn/seoul256.vim'
 call plug#end()
 
 if ! has('gui_running')
@@ -62,7 +63,7 @@ if ! has('gui_running')
     augroup END
 endif
 
-let g:airline_theme = 'angr'
+let g:airline_theme = 'gruvbox'
 let g:airline#extensions#tabline#enabled = 1
 
 let g:fzf_colors =
@@ -82,8 +83,11 @@ let g:fzf_colors =
 
 " Theme
 " let g:seoul256_background = 235
-colo seoul256
-hi ExtraWhitespace ctermbg=1 guibg=Red
+set termguicolors
+set background=light
+colo gruvbox
+let g:gruvbox_contrast = 'soft'
+hi ExtraWhitespace ctermbg=1 guibg=#bf626b
 
 " Key bindings
 " nmap <F8> :Vista<CR>
