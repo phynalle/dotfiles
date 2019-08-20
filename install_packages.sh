@@ -33,6 +33,6 @@ if [ -z "$INSTALLER" ] ; then
     exit -1
 fi
 
-install fish git ripgrep exa
+install gcc fish git ripgrep exa
 # fd는 패키지마다 이름이 달라서 따로 설치하자..
 echo "Let's install fd-find, manually"

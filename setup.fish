@@ -7,9 +7,11 @@ omf install fzf
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
+mkdir -p (dirname $FISH_CONFIG_PATH)
 ln -s (realpath sh/config.fish) $FISH_CONFIG_PATH
 source $FISH_CONFIG_PATH
 
+mkdir -p (dirname $VIM_CONFIG_PATH)
 ln -s (realpath vim/base.vim) $VIM_CONFIG_PATH
 
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -20,4 +22,6 @@ vi +PlugInstall
 rustup install stable
 rustup component add rls rust-analysis rust-src clippy rustfmt
 
+git config --global user.email "phynalism@gmail.com"
+git config --global user.name "phynalle"
 git config --global merge.tool diff3
