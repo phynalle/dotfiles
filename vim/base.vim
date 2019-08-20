@@ -29,6 +29,7 @@ endif
 call plug#begin('~/.vim/plugged')
 " UI
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Language Support
 " Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
@@ -36,7 +37,7 @@ Plug 'sheerun/vim-polyglot'
 
 " IDE Support
 Plug 'Yggdroot/indentLine'
-" Plug 'easymotion/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
@@ -49,6 +50,7 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'liuchengxu/vista.vim'
 Plug 'cohama/agit.vim'
 Plug 'rbgrouleff/bclose.vim'
+Plug 'junegunn/seoul256.vim'
 call plug#end()
 
 if ! has('gui_running')
@@ -60,26 +62,30 @@ if ! has('gui_running')
     augroup END
 endif
 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case" '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+let g:airline_theme = 'angr'
+let g:airline#extensions#tabline#enabled = 1
+
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " Theme
-" set background=dark
-" colo base16-gruvbox-dark-pale
 " let g:seoul256_background = 235
-" colo seoul256
-" hi CursorLineNr guibg=#3F3F3F
-" hi ExtraWhitespace guibg=Red
-" Nerdtree
-" let g:nerdtree_tabs_open_on_console_startup=1
-" let NERDTreeMapOpenInTab='<ENTER>'
+colo seoul256
+hi ExtraWhitespace ctermbg=1 guibg=Red
 
 " Key bindings
-" map <Leader>n <plug>NERDTreeTabsToggle<CR>
 " nmap <F8> :Vista<CR>
 map <C-P> :FZF<CR>
 
@@ -104,5 +110,3 @@ nnoremap <silent> <Leader>bD :Bclose!<CR>
 " s{char}{char} to move to {char}{char}
 nmap <Leader>s <Plug>(easymotion-sn)
 nmap <Leader>t <Plug>(easymotion-tn)
-
-let g:airline#extensions#tabline#enabled = 1
