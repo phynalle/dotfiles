@@ -15,14 +15,15 @@ set autoread
 set signcolumn=yes
 set updatetime=150
 set shortmess+=c
+set timeoutlen=1000 ttimeoutlen=0
 
 au FileType c,cpp setl sw=2 sts=2
 au FileType go setl sts=0 noexpandtab
 au BufEnter * EnableStripWhitespaceOnSave
-" au CursorHold,FocusGained,BufEnter * :checktime
+au CursorHold,FocusGained,BufEnter * :checktime
 
 if has('nvim')
-"  nmap <BS> <C-H>
+  nmap <BS> <C-H>
 endif
 
 call plug#begin('~/.vim/plugged')
