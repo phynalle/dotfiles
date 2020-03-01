@@ -13,7 +13,7 @@ set rnu
 set noshowmode
 set autoread
 set signcolumn=yes
-set updatetime=150
+set updatetime=100
 set shortmess+=c
 set timeoutlen=1000 ttimeoutlen=0
 
@@ -21,6 +21,15 @@ au FileType c,cpp setl sw=2 sts=2
 au FileType go setl sts=0 noexpandtab
 au BufEnter * EnableStripWhitespaceOnSave
 au CursorHold,FocusGained,BufEnter * :checktime
+
+" How can I open a NERDTree automatically when vim starts up if no files were specified?
+autocmd StdinReadPre * let s:std_in=1
+" autocmd vimenter * NERDTree | wincmd p
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | wincmd p | endif
+" How can I open NERDTree automatically when vim starts up on opening a directory?
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+" How can I close vim if the only window left open is a NERDTree?
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 if has('nvim')
   nmap <BS> <C-H>
@@ -34,7 +43,7 @@ Plug 'junegunn/seoul256.vim'
 Plug 'morhetz/gruvbox'
 
 " Language Support
-" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 
 " IDE Support
@@ -49,9 +58,11 @@ Plug 'tpope/vim-sensible'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'liuchengxu/vista.vim'
+" Plug 'liuchengxu/vista.vim'
 Plug 'cohama/agit.vim'
 Plug 'rbgrouleff/bclose.vim'
+Plug 'dracula/vim', {'as': 'dracula'}
+Plug 'preservim/nerdtree'
 call plug#end()
 
 if ! has('gui_running')
@@ -63,8 +74,9 @@ if ! has('gui_running')
     augroup END
 endif
 
-let g:airline_theme = 'gruvbox'
+let g:airline_theme = 'dracula'
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -84,14 +96,17 @@ let g:fzf_colors =
 " Theme
 " let g:seoul256_background = 235
 set termguicolors
-set background=light
-colo gruvbox
-let g:gruvbox_contrast = 'soft'
+set background=dark
+colo dracula
+" let g:gruvbox_contrast = 'soft'
 hi ExtraWhitespace ctermbg=1 guibg=#bf626b
+let g:NERDTreeWinSize=42
 
 " Key bindings
 " nmap <F8> :Vista<CR>
 map <C-P> :FZF<CR>
+map <C-n> :NERDTreeToggle<CR>
+tnoremap <Esc> <C-\><C-n>:q!<CR>
 
 " Keybindings to control buffer
 nmap <C-T> :enew<CR>
@@ -109,6 +124,12 @@ let g:strip_whitespace_on_save = 1
 let g:strip_whitespace_confirm = 0
 
 let g:gitgutter_grep='rg'
+let g:gitgutter_sign_added = '▎'
+let g:gitgutter_sign_modified = '▎'
+let g:gitgutter_sign_removed = '▏'
+let g:gitgutter_sign_removed_first_line = '▔'
+let g:gitgutter_sign_modified_removed = '▋'
+
 nnoremap <silent> <Leader>bD :Bclose!<CR>
 
 " s{char}{char} to move to {char}{char}
