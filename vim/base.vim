@@ -76,7 +76,7 @@ endif
 
 let g:airline_theme = 'dracula'
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 0  " Disabled beacuse of fucking bug
+let g:airline_powerline_fonts = 1
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
