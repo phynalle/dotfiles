@@ -1,14 +1,12 @@
 #!/usr/bin/env fish
-set -x FISH_CONFIG_PATH ~/.config/fish/config.fish
+set -x CURRENT_DIR (realpath (status --current-filename) | path dirname)
 
 curl -L https://get.oh-my.fish | fish
 omf install fzf
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-mkdir -p (dirname $FISH_CONFIG_PATH)
-ln -s (realpath ../configs/fish/config.fish) $FISH_CONFIG_PATH
-source $FISH_CONFIG_PATH
+fish $CURRENT_DIR/install_configs.fish
 
 # Settings for rust
 rustup install stable
