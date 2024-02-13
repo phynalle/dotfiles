@@ -4,6 +4,8 @@ email = "phynalism@gmail.com"
 
 [ui]
 default-command = "log"
+# Configuration for difftastic (https://github.com/Wilfred/difftastic)
+# diff.tool = ["difft", "--color=always", "$left", "$right"]
 
 ### Windows 전용 설정 ###
 # Windows는 페이저를 지원하지 않기 때문에 bat으로 설정. 0.15버전에서 기본 pager 지원 예정이므로 업데이트 후 제거
