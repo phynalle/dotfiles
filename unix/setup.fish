@@ -7,7 +7,7 @@ omf install fzf
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 mkdir -p (dirname $FISH_CONFIG_PATH)
-ln -s (realpath sh/config.fish) $FISH_CONFIG_PATH
+ln -s (realpath ../configs/fish/config.fish) $FISH_CONFIG_PATH
 source $FISH_CONFIG_PATH
 
 # Settings for rust
