@@ -1,0 +1,27 @@
+keybinds {
+    normal {
+        bind "Alt c" { Copy; }
+
+        unbind "Ctrl n"
+        unbind "Ctrl h"
+        unbind "Ctrl p"
+        unbind "Ctrl t"
+        unbind "Ctrl s"
+        unbind "Ctrl o"
+
+        unbind "Ctrl b"
+        bind "Ctrl q" { SwitchToMode "Tmux"; }
+    }
+    shared_except "tmux" "locked" {
+        unbind "Ctrl b"
+        bind "Ctrl q" { SwitchToMode "Tmux"; }
+    }
+}
+
+theme "Gruvbox Dark"
+
+ui {
+    pane_frames {
+        rounded_corners true
+    }
+}
