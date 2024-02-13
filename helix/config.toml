@@ -1,0 +1,38 @@
+theme = "rose_pine_moon"
+
+[editor]
+true-color = true
+line-number = "relative"
+bufferline = "multiple"
+mouse = false
+
+[editor.cursor-shape]
+insert = "bar"
+select = "underline"
+ 
+[editor.indent-guides]
+render = true
+character = "╎"
+skip-levels = 1
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name"]
+
+[editor.lsp]
+display-inlay-hints = true
+
+[keys.normal]
+C-h = ":buffer-previous"
+C-l = ":buffer-next"
+A-w = ":buffer-close!"
+
+"{" = ["goto_prev_paragraph", "collapse_selection"]
+"}" = ["goto_next_paragraph", "collapse_selection"]
+"^" = "goto_first_nonwhitespace"
+D = ["extend_to_line_end", "delete_selection"]
+"ret" = ["move_line_down", "goto_first_nonwhitespace"]
+
+[keys.select]
+"{" = ["extend_to_line_bounds", "goto_prev_paragraph"]
+"}" = ["extend_to_line_bounds", "goto_next_paragraph"]
+"^" = "goto_first_nonwhitespace"
