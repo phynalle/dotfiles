@@ -1,0 +1,14 @@
+[user]
+name = "phynalle"
+email = "phynalism@gmail.com"
+
+[ui]
+default-command = "log"
+
+### Windows 전용 설정 ###
+# Windows는 페이저를 지원하지 않기 때문에 bat으로 설정. 0.15버전에서 기본 pager 지원 예정이므로 업데이트 후 제거
+# paginate = "auto"
+# pager = ["bat", "-p" ]
+
+[template-aliases]
+"format_short_change_id(id)" = "format_short_id(id).prefix()" # Prefix만 보여줌
