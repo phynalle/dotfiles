@@ -3,7 +3,6 @@ set -x CONFIG_PATH "~/.config/fish/config.fish"
 set -x DENO_INSTALL "~/.local"
 set -a PATH "$DENO_INSTALL/bin"
 
-source ~/.cargo/env
 set -xg EDITOR hx
 
 eval (direnv hook fish)
