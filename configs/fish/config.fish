@@ -2,6 +2,7 @@ set -x CONFIG_PATH "~/.config/fish/config.fish"
 
 set -x DENO_INSTALL "~/.local"
 set -a PATH "$DENO_INSTALL/bin"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 set -xg EDITOR hx
 
