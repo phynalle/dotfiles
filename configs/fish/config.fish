@@ -10,9 +10,7 @@ eval (direnv hook fish)
 jj util completion fish | source
 
 alias ls=exa
-alias vi=nvim
-alias vim=nvim
-alias conf="vi $CONFIG_PATH; and source $CONFIG_PATH"
+alias conf="hx $CONFIG_PATH; and source $CONFIG_PATH"
 alias kz="date '+%Y-%0m-%d %H:%M:%S %z (%s)'"
 
 alias node="node --max_old_space_size=8192"
