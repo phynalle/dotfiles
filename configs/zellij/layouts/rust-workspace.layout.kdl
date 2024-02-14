@@ -1,0 +1,25 @@
+layout {
+	pane split_direction="vertical" {
+		pane split_direction="horizontal" {
+			pane {
+				size "80%"
+				borderless true
+				focus true
+			}
+			pane command="cargo" {
+				args "run"
+				start_suspended true
+			}
+		}
+		pane split_direction="horizontal" {
+			size "30%"
+			pane {
+				size "30%"
+			}
+			pane command="jj" {
+				args "log"
+				start_suspended true
+			}
+		}
+	}
+}
